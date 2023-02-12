@@ -1,0 +1,5 @@
+80/443 - OpenLuck (https://www.exploit-db.com/exploits/47080) || (https://github.com/hel2tonWernik/OpenLuck)
+
+139 - Samba 2.2.1a (https://www.rapid7.com/db/modules/exploit/linux/samba/trans2open/); https://www.exploit-db.com/exploits/7; https://www.exploit-db.com/exploits/10
+
+

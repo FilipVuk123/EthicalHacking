@@ -1,0 +1,6 @@
+Starting Nmap 7.93 ( https://nmap.org ) at 2023-02-10 17:42 EST
+Warning: 192.168.253.245 giving up on port because retransmission cap hit (6).
+Stats: 0:07:13 elapsed; 0 hosts completed (1 up), 1 undergoing UDP Scan
+UDP Scan Timing: About 0.70% done
+Stats: 0:07:13 elapsed; 0 hosts completed (1 up), 1 undergoing UDP Scan
+UDP Scan Timing: About 0.70% done

