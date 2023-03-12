@@ -1,0 +1,40 @@
+Starting Nmap 7.93 ( https://nmap.org ) at 2023-03-12 05:36 EDT
+Nmap scan report for 192.168.50.142
+Host is up (0.014s latency).
+Not shown: 65525 closed tcp ports (conn-refused)
+PORT      STATE    SERVICE VERSION
+21/tcp    open     ftp     vsftpd 3.0.3
+| ftp-anon: Anonymous FTP login allowed (FTP code 230)
+|_-rw-r--r--    1 1000     1000          776 May 30  2021 note.txt
+| ftp-syst: 
+|   STAT: 
+| FTP server status:
+|      Connected to ::ffff:192.168.50.228
+|      Logged in as ftp
+|      TYPE: ASCII
+|      No session bandwidth limit
+|      Session timeout in seconds is 300
+|      Control connection is plain text
+|      Data connections will be plain text
+|      At session startup, client count was 4
+|      vsFTPd 3.0.3 - secure, fast, stable
+|_End of status
+22/tcp    open     ssh     OpenSSH 7.9p1 Debian 10+deb10u2 (protocol 2.0)
+| ssh-hostkey: 
+|   2048 c744588690fde4de5b0dbf078d055dd7 (RSA)
+|   256 78ec470f0f53aaa6054884809476a623 (ECDSA)
+|_  256 999c3911dd3553a0291120c7f8bf71a4 (ED25519)
+80/tcp    open     http    Apache httpd 2.4.38 ((Debian))
+|_http-title: Apache2 Debian Default Page: It works
+|_http-server-header: Apache/2.4.38 (Debian)
+4892/tcp  filtered unknown
+6819/tcp  filtered unknown
+11430/tcp filtered lsdp
+31121/tcp filtered unknown
+43593/tcp filtered unknown
+56208/tcp filtered unknown
+63045/tcp filtered unknown
+Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 28.11 seconds
