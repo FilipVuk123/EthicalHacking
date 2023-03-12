@@ -1,0 +1,19 @@
+80/tcp open  http    nginx 1.14.2
+|_http-title: Welcome to nginx!
+|_http-server-header: nginx/1.14.2
+
+
+	<!-- Webmaster: alek@blackpearl.tcm -->
+	secret file... BUST
+	
+
+
+53/tcp open  domain  ISC BIND 9.11.5-P4-5.1+deb10u5 (Debian Linux)
+| dns-nsid: 
+|_  bind.version: 9.11.5-P4-5.1+deb10u5-Debian
+
+
+	Linux blackpearl 4.19.0-16-amd64 #1 SMP Debian 4.19.181-1 (2021-03-19) x86_64 
+		
+	-rwsr-xr-x 1 root root 4.6M Feb 13  2021 /usr/bin/php7.3 (Unknown SUID binary!)
+
