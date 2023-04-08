@@ -1,0 +1,42 @@
+Nmap scan report for 192.168.59.186
+Host is up (0.00044s latency).
+Not shown: 65525 closed tcp ports (conn-refused)
+PORT      STATE SERVICE      VERSION
+135/tcp   open  msrpc        Microsoft Windows RPC
+139/tcp   open  netbios-ssn  Microsoft Windows netbios-ssn
+445/tcp   open  microsoft-ds Windows 7 Ultimate 7601 Service Pack 1 microsoft-ds (workgroup: WORKGROUP)
+5357/tcp  open  http         Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
+|_http-title: Service Unavailable
+|_http-server-header: Microsoft-HTTPAPI/2.0
+49152/tcp open  msrpc        Microsoft Windows RPC
+49153/tcp open  msrpc        Microsoft Windows RPC
+49154/tcp open  msrpc        Microsoft Windows RPC
+49155/tcp open  msrpc        Microsoft Windows RPC
+49156/tcp open  msrpc        Microsoft Windows RPC
+49162/tcp open  msrpc        Microsoft Windows RPC
+Service Info: Host: TEST-PC; OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Host script results:
+| smb-os-discovery: 
+|   OS: Windows 7 Ultimate 7601 Service Pack 1 (Windows 7 Ultimate 6.1)
+|   OS CPE: cpe:/o:microsoft:windows_7::sp1
+|   Computer name: test-PC
+|   NetBIOS computer name: TEST-PC\x00
+|   Workgroup: WORKGROUP\x00
+|_  System time: 2023-04-08T00:00:47-07:00
+| smb2-security-mode: 
+|   210: 
+|_    Message signing enabled but not required
+|_nbstat: NetBIOS name: TEST-PC, NetBIOS user: <unknown>, NetBIOS MAC: 0800277d1af4 (Oracle VirtualBox virtual NIC)
+| smb2-time: 
+|   date: 2023-04-08T07:00:47
+|_  start_date: 2023-04-08T06:54:51
+| smb-security-mode: 
+|   account_used: guest
+|   authentication_level: user
+|   challenge_response: supported
+|_  message_signing: disabled (dangerous, but default)
+|_clock-skew: mean: 11h19m57s, deviation: 4h02m29s, median: 8h59m57s
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 163.68 seconds
