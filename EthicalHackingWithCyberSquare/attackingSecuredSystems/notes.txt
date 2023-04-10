@@ -69,3 +69,8 @@ Creating payloads
         
             
 
+    lets code a working backdoor in python
+        checkout my_payload.py and my_server.py
+
+        compile python to exe:
+            
