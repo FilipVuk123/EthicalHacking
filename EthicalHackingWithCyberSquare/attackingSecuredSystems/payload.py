@@ -22,7 +22,7 @@ def reliable_recv(sock):
             chunk = sock.recv(4096).decode().rstrip()
             data += chunk
             return json.loads(data)
-        except json.JSONDecodeError:
+        except:
             continue
     return
 
