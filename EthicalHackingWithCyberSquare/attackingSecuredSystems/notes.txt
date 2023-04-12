@@ -74,3 +74,6 @@ Creating payloads
 
         compile python to exe before sending it to a victim
             
+        
+        Lets try and make it work over WAN:
+            port forwarding?
