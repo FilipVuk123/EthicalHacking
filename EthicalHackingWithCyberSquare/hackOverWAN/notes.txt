@@ -1,0 +1,22 @@
+1. port forwarding
+    did not work for me :(
+
+2. ngrok
+    downlaod and install   
+
+    ./ngrok tcp 5555
+        Account                       Filip Vuković (Plan: Free)                                                                                                                                                           
+        Version                       3.2.2                                                                                                                                                                                
+        Region                        Europe (eu)                                                                                                                                                                          
+        Latency                       58ms                                                                                                                                                                                 
+        Web Interface                 http://127.0.0.1:4040                                                                                                                                                                
+        Forwarding                    tcp://6.tcp.eu.ngrok.io:12958 -> localhost:5555                                                                                                                                      
+                                                                                                                                                                                                                   
+
+    host tcp://6.tcp.eu.ngrok.io                                                                                                                
+    tcp://6.tcp.eu.ngrok.io has address 3.125.209.94
+    tcp://6.tcp.eu.ngrok.io has IPv6 address 2a05:d014:21b:8e00::6e:0
+
+    create payload with lhost 3.125.209.94 and lport 12958
+
+    setup multi handler with lhost 0.0.0.0 and lport 5555 -> execute the script -> |WORKS!!!
