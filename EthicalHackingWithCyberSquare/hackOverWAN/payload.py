@@ -5,8 +5,8 @@ import json
 import signal
 import os
 
-ip = '3.64.4.198'
-port = 19395
+ip = '192.168.88.13'
+port = 5555
 
 sigint = False
 
