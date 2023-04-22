@@ -59,7 +59,7 @@ Creating payloads
             under advanced sfx options use:
                 extract and update
                 override all files
-                add SFX icon
+                load SFX icon from file
                 unpack to temp folder 
                 hide all 
                 under run after extraction add .exe and .png file names (correctly!)
@@ -77,3 +77,4 @@ Creating payloads
         
         Lets try and make it work over WAN:
             port forwarding?
+            ngrok -> checkout hackingOverWAN fodler (cd ..)

