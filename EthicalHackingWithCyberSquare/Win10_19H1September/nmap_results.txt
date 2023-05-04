@@ -1,4 +1,4 @@
-Nmap scan report for 192.168.59.16
+Nmap scan report for <VICTIM IP>
 Host is up (0.00054s latency).
 Not shown: 65422 closed tcp ports (conn-refused), 102 filtered tcp ports (no-response)
 PORT      STATE SERVICE       VERSION

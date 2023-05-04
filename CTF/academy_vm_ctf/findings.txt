@@ -8,7 +8,7 @@
 
 
 
-http://192.168.50.142/ returns default web page 
+http://<VICTIM IP>/ returns default web page 
 
 
-Apache/2.4.38 (Debian) Server at 192.168.50.142 Port 80
+Apache/2.4.38 (Debian) Server at <VICTIM IP> Port 80

