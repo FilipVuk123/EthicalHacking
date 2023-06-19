@@ -1,0 +1,13 @@
+ Volume in drive C has no label.
+ Volume Serial Number is 6EB3-C2D1
+
+ Directory of C:\Users\Filip\Desktop\MojiProjekti\HackingWithPython\EducationalTrojanPython
+
+31.12.2020.  00:19    <DIR>          .
+31.12.2020.  00:19    <DIR>          ..
+30.12.2020.  20:50               471 out.txt
+31.12.2020.  00:18               397 server.py
+31.12.2020.  00:19                 0 text.txt
+31.12.2020.  00:18             1.560 trojan.py
+               4 File(s)          2.428 bytes
+               2 Dir(s)  54.892.408.832 bytes free
