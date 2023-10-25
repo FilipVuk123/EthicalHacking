@@ -1,0 +1,18 @@
+Episode name: eps1.5_br4ve-trave1er.asf
+
+$ sudo hciconfig hci0 up
+
+$ sudo hcitool scan // looking for other bt devices
+
+$ sudo hcitool inq // gives more information: classes... that's the key
+
+Multiblue dongle - device that can act as a keyboard - used in the show (flashed with a keyboard BT class). Its basically a keyboard
+
+$ sudo apt install spooftooph // to spoof a bluetooth device, spoof a mac address 
+
+$ sudo spooftooph -i hci0 -a <multiblue tongles MAC> -n test // spooofing a BT and naming it test. 
+
+
+Now the Multiblue dongle can be used as bluetooth keyboard - making the laptop belive that that is the device its already connected to (skipping pairing of the devices). 
+Now that he is connected to the laptop - he controlles the prision system
+Now you just type the exploit (which is a little bit unrealistic since he cannot see what he is typing...)
