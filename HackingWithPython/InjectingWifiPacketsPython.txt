@@ -1,0 +1,64 @@
+airmon-ng check kill
+airmon-ng start <interface>
+aireplay --test <interface> 
+// sends probe requests and waits for responses
+
+python3
+
+from scapy.all import *
+
+ls()
+
+
+my_addr = "11:22:33:44:55:66"
+dest_addr = "ff:ff:ff:ff:ff:ff" // broadcast
+
+
+// creating a probe request frame
+
+probe_req_pkt = RadioTap () / Dot11(addr1=dest_addr, addr2=my_addr, addr3=my_addr) / Dot11ProbeReq() / Dot11Elt()
+
+sendp(probe_req_pkt, iface='<interface>')
+
+deauth_pkt = RadioTap () / Dot11(addr1=dest_addr, addr2=my_addr, addr3=my_addr) / Dot11Deauth() / Dot11Elt()
+
+
+sendp(deauth_pkt, iface='<interface>')
+
+
+beacon_pkt = RadioTap () / Dot11(addr1=dest_addr, addr2=my_addr, addr3=my_addr) / Dot11Beacon() / Dot11Elt(ID='SSID', info='mySSID', len=len('mySSID'))
+
+
+// packet replay - from pcap file 
+
+frames=rdpcap('<filename>')
+
+
+frames[78].show()
+
+
+frames[78].getlayer(Dot11).addr2 = my_addr
+frames[78].getlayer(Dot11).addr3 = my_addr
+
+
+frames[78].show()
+
+
+sendp(frames[78], iface='<interface>')
+
+
+
+// sniff packets
+
+access_points = []
+ssid = lambda packet: "<Hidden SSID>" if not packet.info else packet.info
+
+def packet_hander(packet):
+	if packet.haslayer(Dot11Beacon):
+		if (packet.addr2 not in access_points):
+			access_points.append(packet.addr2)
+			print("BSSID: {}. SSID: {}, RSSI: {} dBm, Freq: {} MHz".format(packet.addr2, ssid(packet), packet.dBm_AntSignal, packet.ChannelFrequency))
+
+
+
+sniff(prn = packet_handler, iface='<interface>')
