@@ -1,0 +1,10 @@
+ETHICAL HACKING FOUNDATIONS: Malware Development
+by: reenz0h (@sektor7net)
+
+Although some level of experience in C programming and Intel assembly reading is required, you don't have to be an expert in this field. Basic knowledge about the syntax, data structures and function calling convention is enough during the course.
+For refresher check these resources: 
+
++ Windows API tutorial: http://zetcode.com/gui/winapi/
++ Understanding Windows x64 Assembly: https://sonictk.github.io/asm_tutorial/
++ Introduction to x64 Assembly:
+https://software.intel.com/content/www/us/en/develop/articles/introduction-to-x64-assembly.html

@@ -1,0 +1,39 @@
+Download win10.ova from https://ln4.sync.com/dl/a67c3e0c0/ffdqygsf-cqxicvmb-3ki9ehrj-gcsfszkg/view/default/11890955400008
+
+
+PE files:
+    Portable executable
+        Structure: headers + sections... => metadata + data (https://github.com/corkami/pics/blob/master/binary/pe101/README.md)
+
+        use pe bear to load exe files and see that structure - most important things: .rtext, .rdata, .rsrc
+        or use dumpbin in cli: $ dumpbin /headers c:\windows\system32\calc.exe 
+
+
+
+
+    Generating exe vc dll:
+        exe vs dynamic-link library 
+        
+
+        $ rundll32 implant.dll,RunME
+
+        use Proces Hacker to see the running processes 
+
+
+Droppers:
+
+    Program that will deliver the payload to a victim
+
+    can be javascript, powershell (or even .exe)
+
+    Where to store the payload?
+        1) .text - put the payload into main function (02.Payload_Storage/01.implant.text)
+        2) .data - read only -> create a global variable holding the payload (02.Payload_Storage/01.implant.data)
+        3) .rsrc - create a small file that holds the payload 
+                    -> tell the compiler that theat file is the part of the resources section 
+                    -> use specific API calls that extracts the payload (02.Payload_Storage/01.implant.rsrc)
+
+
+
+Obfuscation and hiding:
+    
