@@ -47,7 +47,7 @@ int main(void) {
 	getchar();
 
 	// Decode the payload back to binary form
-	DecodeBase64((const BYTE *)calc_payload, calc_len, (char *) exec_mem, calc_len);
+	DecodeBase64((const BYTE *)calc_payload, calc_len, (char *) exec_mem, calc_len); // decoding payload
 	
 	// Make the buffer executable
 	rv = VirtualProtect(exec_mem, calc_len, PAGE_EXECUTE_READ, &oldprotect);

