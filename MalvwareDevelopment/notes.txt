@@ -66,3 +66,84 @@ Obfuscation and hiding:
 
             to check that the program doesnot use virtualprotect
                 $ c:\rto\tools\si\strings.exe -n 8 implant.exe | findstr /i "virtual"
+
+
+Backdoors and trojan
+
+    methods of implanting
+        1) Code cave - spare space in a PE file (usually in .text space) that is not occupied by other data (just a few handred bytes of free space - enough for mid size shell code) 
+        2) NewSection - add new section and set the size to anything you want - downsize: you have to set this section as executable (easily caught by an AV)
+        3) Expand a section 
+        4) Combine few of these methods 
+
+    lets do this to a Putty program:
+        1. put the program into a debugger to find the code cave address (breakpoint -> entry point -> find 0000 0000 ...): 0045C961
+        2. create a jump to our code cave and then jump back to the original code
+
+00454AD0 | 6A 60                    | push 60                                 |
+00454AD2 | 68 B07A4700              | push putty.477AB0                       |
+00454AD7 | E8 08210000              | call putty.456BE4                       |
+00454ADC | BF 94000000              | mov edi,94                              | edi:"LdrpInitializeProcess"
+00454AE1 | 8BC7                     | mov eax,edi                             | edi:"LdrpInitializeProcess"
+
+        3. assemble: jmp to our address: 0x0045C961
+        4. lets copy the shellcode to out code cave
+            pushad
+            pushfd
+            past the shellcode (leave the last line as is - we will need it to jump back to the original program): binary -> edit -> ctrl+v 
+        5. search for the termination call in our shellcode 
+            0045CA16 | 6A 00                    | push 0                                  |
+            0045CA18 | 53                       | push ebx                                |
+            0045CA19 | FFD5                     | call ebp                                |
+        6. jump over it (create a jump from 0045CA16 to some address with 0000 instructions) and restore the original call for the putty program
+            popfd
+            popad
+
+
+00454AD0 | 6A 60                    | push 60                                 |
+00454AD2 | 68 B07A4700              | push putty.477AB0                       |
+
+            edit binary with this: 6A 60 68 B0 7A 47 00
+            jump to the putty call: 00454AD7
+        7. ctrl + P to patch the file and thats it! 
+
+
+
+Code injection 
+    
+    Transfering a payload from one proces to another 
+        Why? to excape short-lived process, change working context, backup connection session (TOON rule = Two is One, One is None)...
+
+        Classic methods? 
+            debugging win API
+            DLL injection
+
+
+    Payload injection
+        using VirtualAllocEx, WriteProcessMemory, CreateRemoteThread...
+            07.Code_Injection/01.Shellcode/implant.cpp
+
+    DLL injection
+        07.Code_Injection/02.DLL/injectDLL.cpp and 07.Code_Injection/02.DLL/implantDLL.cpp
+
+            1. Get LoadLibrary address from out process using GetProcAddress
+            2. we allocate the memory at the injection process using WirtualAllocEx
+            3. we copy the path to the DLL with WriteProcessMemory
+            4. call CreateRemoteThread with the address (from step 1) and the path (from step 3)
+
+        
+Hiding console (no console window pop-up)
+
+    Freeconsole - the console is still visible but for a very short amount of time - 08.Hiding_Console/01.Freeconsole/implant.cpp 
+    GUI trick - compiling a program as a gui program - 08.Hiding_Console/02.GUItrick/implant.cpp - 
+
+    
+
+ToDo: 
+    import address table hooking
+    migrate 32 and 64 bit processes
+    reflective DLL injection
+    .
+    .
+    .
+
