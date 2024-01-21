@@ -1,0 +1,9 @@
+use direct urls!!!
+
+autoit compiler comes with Veil framework!!!
+
+Use it to compile and add an icon to the backdoor
+
+image + backdoor
+pdf + backdoor
+

