@@ -1,0 +1,13 @@
+Mail delivery
+    Setting up SMTP Server
+        Brevo website - signup for free plan - use their smtp server to send emails
+
+        in kali: sendemail -xu <username> -xp <password> -s <server>:<port> -f <from email> -t <to email> -u <title> -m <message containing a lik to the image/pdf with the backdoor> -o message-header="From: Mohamed Askar <m.askar@isecur1ty.org>"
+        
+         
+    Using php
+        requires a web hosting plan (for example: dreamhost)
+        
+        
+
+

