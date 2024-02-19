@@ -1,0 +1,15 @@
+Detecting fake emails
+    look closely at the from field
+    use "view source" for the message
+    reply to the email - see the reply address
+
+
+Protect agains Beef
+    Prevent javascript from working on untrusted websites (no javascript plugin)
+
+Detecting trojans manually
+    check file properties
+    run and analize file in a VM
+    analize IPs with reverse dns lookup 
+    using online sandbox - https://www.hybrid-analysis.com/
+
